@@ -74,7 +74,6 @@ DynamicArray *controller__quantityFilter(Controller *controller, int quantity) {
             dynamicArray__addElement(copy, dynamicArray__getElement(objects, i));
         }
     }
-    dynamicArray__destroy(objects);
     return copy;
 }
 Controller *controller__create(Repo *repo, OperationStack *undoStack, OperationStack *redoStack) {
@@ -118,7 +117,6 @@ bool controller__undo(Controller *controller) {
         opstack__push(controller->redoStack, redo_operation);
         operation__destroy(redo_operation);
     }
-    medication__destroy(medication);
     operation__destroy(operation);
     return true;
 }
@@ -134,7 +132,7 @@ bool controller__redo(Controller *controller) {
         opstack__push(controller->undoStack, operation);
     } else if (strcmp(operationType, "remove") == 0) {
         repo__remove(controller->repo, getMedicationName(medication), getMedicationConcentration(medication));
-        opstack__push(controller->redoStack, operation);
+        opstack__push(controller->undoStack, operation);
     } else if (strcmp(operationType, "update") == 0) {
         Medication *original_medication =
             repo__get(controller->repo, getMedicationName(medication), getMedicationConcentration(medication));
@@ -145,7 +143,6 @@ bool controller__redo(Controller *controller) {
         opstack__push(controller->undoStack, undo_operation);
         operation__destroy(undo_operation);
     }
-    medication__destroy(medication);
     operation__destroy(operation);
     return true;
 }

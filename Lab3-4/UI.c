@@ -151,7 +151,6 @@ void PrintMedication(Controller *controller) {
         printf("Name: %s, concentration: %d, quantity: %d, price: %d \n", getMedicationName(medicates[i]),
                getMedicationConcentration(medicates[i]), getMedicationQuantity(medicates[i]),
                getMedicationPrice(medicates[i]));
-        medication__destroy(medicates[i]);
     }
     free(medicates);
     dynamicArray__destroy(objects);
@@ -179,7 +178,6 @@ void ListMedicationContainingString(Controller *controller) {
         printf("Name: %s, concentration: %d, quantity: %d, price: %d \n", getMedicationName(medicates[i]),
                getMedicationConcentration(medicates[i]), getMedicationQuantity(medicates[i]),
                getMedicationPrice(medicates[i]));
-        medication__destroy(medicates[i]);
     }
     free(medicates);
     dynamicArray__destroy(objects);
