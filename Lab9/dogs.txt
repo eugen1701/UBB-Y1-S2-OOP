@@ -1,0 +1,10 @@
+Labrador,Gigel,7,poza
+Labrador,Andrei,8,poza
+Poodle,Ana,13,poza
+Pechinez,Zus,2,poza
+Chuuaua,Min,10,poza
+Husky,Maxi,5,poza
+Beagle,Joynny,3,poza
+Terrier,Stick,5,poza
+Pomeranian,Pufi,3,poza
+Beagle,Andrei,50,poooooozaaa
