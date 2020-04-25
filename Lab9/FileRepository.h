@@ -9,12 +9,15 @@
 #include <vector>
 class FileRepository : public Repository {
   private:
-    std::string fileName;
     virtual std::vector<Dog> readData() const;
     virtual void writeData(const std::vector<Dog> &dogs);
 
+  protected:
+    std::string fileName;
+
   public:
-    explicit FileRepository(std::string fileName) : fileName(std::move(fileName)) {}
+    explicit FileRepository(std::string fileName) : fileName(std::move(fileName)) {
+    }
     void addDog(Dog &dog) override;
     Dog getDog(const std::string &breed, const std::string &name) override;
     bool removeDog(const std::string &breed, const std::string &name) override;

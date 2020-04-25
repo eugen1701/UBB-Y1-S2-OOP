@@ -3,11 +3,13 @@
 //
 
 #include "Service.h"
+#include "DogValidator.h"
 bool Service::addDog(const std::string &breed, const std::string &name, int age, const std::string &photograph) {
     if (this->repository.isDog(breed, name)) {
         return false;
     }
     Dog *dog = new Dog(breed, name, age, photograph);
+    DogValidator::validate(*dog);
     this->repository.addDog(*dog);
     delete dog;
     return true;
@@ -18,7 +20,7 @@ bool Service::removeDog(const std::string &breed, const std::string &name) {
 std::string Service::listDogs() {
     auto dogs = this->repository.getDogs();
     std::string result;
-    for (auto & i : dogs) {
+    for (auto &i : dogs) {
         result += i.toString();
         result += "\n";
     }
@@ -36,6 +38,7 @@ bool Service::updateDog(const std::string &breed, const std::string &name, int a
     if (!photograph.empty()) {
         dog.setPhotograph(photograph);
     }
+    DogValidator::validate(dog);
     this->repository.addDog(dog);
     return true;
 }
@@ -43,7 +46,7 @@ std::vector<Dog> Service::filterDogs(const std::string &breed, int age) {
     std::vector<Dog> tempDogs;
     auto dogs = repository.getDogs();
     for (auto &dog : dogs) {
-        if((breed.empty() || dog.getBreed() == breed) && dog.getAge() < age) {
+        if ((breed.empty() || dog.getBreed() == breed) && dog.getAge() < age) {
             tempDogs.push_back(dog);
         }
     }
@@ -53,6 +56,7 @@ bool Service::adoptDog(Dog dog) {
     if (this->adoptedRepo.isDog(dog.getBreed(), dog.getName())) {
         return false;
     }
+    DogValidator::validate(dog);
     this->adoptedRepo.addDog(dog);
     return true;
 }

@@ -29,7 +29,15 @@ bool FileRepository::removeDog(const std::string &breed, const std::string &name
     }
     return false;
 }
-bool FileRepository::isDog(const std::string &breed, const std::string &name) { return Repository::isDog(breed, name); }
+bool FileRepository::isDog(const std::string &breed, const std::string &name) {
+    auto dogs = readData();
+    for (auto &dog : dogs) {
+        if (dog.getBreed() == breed && dog.getName() == name) {
+            return true;
+        }
+    }
+    return false;
+}
 std::vector<Dog> FileRepository::readData() const {
     std::vector<Dog> dogs;
     std::ifstream dogsFile{fileName};

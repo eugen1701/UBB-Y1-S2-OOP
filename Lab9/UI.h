@@ -9,9 +9,10 @@ class UI {
   private:
     Service& service;
     bool userMode = false;
+    std::string fileName;
 
   public:
-    explicit UI(Service &service) : service(service) {}
+    explicit UI(Service &service, std::string fileName) : service(service), fileName(fileName) {}
     void run();
 
   private:

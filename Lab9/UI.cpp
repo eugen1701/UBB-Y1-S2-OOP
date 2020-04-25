@@ -3,7 +3,7 @@
 //
 
 #include "UI.h"
-#include <cstdlib>
+#include "DogValidator.h"
 #include <iostream>
 
 using namespace std;
@@ -27,7 +27,15 @@ void UI::addDog() {
     }
     cout << "Dog Photograph: ";
     cin >> photograph;
-    if (service.addDog(breed, name, age, photograph)) {
+    bool result;
+    try {
+        result = service.addDog(breed, name, age, photograph);
+    } catch (InvalidDogException &e) {
+        cout << "Could not add dog!\n";
+        cout << e.what() << endl;
+        return;
+    }
+    if (result) {
         cout << "Dog added successfully" << endl;
     } else {
         cout << "Dog could not be added, already exists!" << endl;
@@ -100,6 +108,18 @@ void UI::userUI() {
             }
         } break;
         case 4:
+#ifdef _WIN64
+            // TODO implement for windows
+#endif
+#ifdef linux
+        {
+            std::string open = "xdg-open ";
+            open += fileName;
+            system(open.c_str());
+        }
+#endif
+            break;
+        case 5:
             return;
         default:
             break;
@@ -187,14 +207,23 @@ void UI::updateDog() {
     }
     cout << "Dog Photograph: ";
     cin >> photograph;
-    if (service.updateDog(breed, name, age, photograph)) {
+    bool result;
+    try {
+        result = service.updateDog(breed, name, age, photograph);
+    } catch (InvalidDogException &e) {
+        cout << "Could not update the dog!\n";
+        cout << e.what() << endl;
+    }
+    if (result) {
         cout << "Dog updated successfully" << endl;
     } else {
         cout << "Dog could not be updated, doesn't exit!\n";
     }
 }
 
-void UI::listDogs() { cout << service.listDogs(); }
+void UI::listDogs() {
+    cout << service.listDogs();
+}
 
 void UI::printAdminMenu() {
     cout << "1. Add dog \n";
@@ -208,7 +237,8 @@ void UI::printUserMenu() {
     cout << "1. Adopt Dogs\n";
     cout << "2. Filter dogs based on Breed and Age\n";
     cout << "3. View Adoption List\n";
-    cout << "4. Exit\n";
+    cout << "4. Open Adoption File\n";
+    cout << "5. Exit\n";
 }
 
 void UI::printAdoptionMenu() {

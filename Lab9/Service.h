@@ -44,7 +44,7 @@ class Service {
     /// \return
     std::vector<Dog> getDogs() { return repository.getDogs(); }
     /// Adds a dog to the adoption list
-    bool adoptDog(Dog dog);
+    bool adoptDog(const Dog dog);
     /// Removes a dog from the adoption list
     bool unadoptDog(const std::string &breed, const std::string &name);
     /// Checks if a dog with the unique identifiers is already adopted
