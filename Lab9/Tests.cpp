@@ -3,7 +3,10 @@
 //
 
 #include "Tests.h"
+#include "DogValidator.h"
 #include "Domain.h"
+#include "FileRepository.h"
+#include "HtmlRepository.h"
 #include "Repository.h"
 #include "Service.h"
 #include <cassert>
@@ -64,6 +67,60 @@ void TestRepository() {
     assert(dog3.getAge() == dog1.getAge());
     assert(dog3.getPhotograph() == dog1.getPhotograph());
 }
+void TestFileRepository() {
+    Dog dog1{"Labrador", "Aniona", 5, "photome"};
+    Dog dog2{"Pomerian", "Pufi", 3, "cevapoza"};
+    FileRepository repo{"test.txt"};
+    repo.addDog(dog1);
+    repo.addDog(dog2);
+    Dog gottenDog = repo.getDog("Rottveiler", "Anion");
+    assert(gottenDog.getName().empty());
+    assert(gottenDog.getBreed().empty());
+    assert(gottenDog.getPhotograph().empty());
+    assert(gottenDog.getAge() == 0);
+    Dog gottenDog2 = repo.getDog("Labrador", "Aniona");
+    assert(gottenDog2.getBreed() == "Labrador");
+    assert(gottenDog2.getName() == "Aniona");
+    assert(gottenDog2.getAge() == 5);
+    assert(gottenDog2.getPhotograph() == "photome");
+    assert(repo.isDog("Pomerian", "Pufi"));
+    assert(!repo.isDog("Pomerian", "Pufion"));
+    assert(repo.removeDog("Pomerian", "Pufi"));
+    assert(!repo.removeDog("Pomerian", "Pufi"));
+    Dog dog3 = repo.getDogs()[0];
+    assert(dog3.getBreed() == dog1.getBreed());
+    assert(dog3.getName() == dog1.getName());
+    assert(dog3.getAge() == dog1.getAge());
+    assert(dog3.getPhotograph() == dog1.getPhotograph());
+    remove("test.txt");
+}
+void TestHtmlRepository() {
+    Dog dog1{"Labrador", "Aniona", 5, "photome"};
+    Dog dog2{"Pomerian", "Pufi", 3, "cevapoza"};
+    HtmlRepository repo{"test.html"};
+    repo.addDog(dog1);
+    repo.addDog(dog2);
+    Dog gottenDog = repo.getDog("Rottveiler", "Anion");
+    assert(gottenDog.getName().empty());
+    assert(gottenDog.getBreed().empty());
+    assert(gottenDog.getPhotograph().empty());
+    assert(gottenDog.getAge() == 0);
+    Dog gottenDog2 = repo.getDog("Labrador", "Aniona");
+    assert(gottenDog2.getBreed() == "Labrador");
+    assert(gottenDog2.getName() == "Aniona");
+    assert(gottenDog2.getAge() == 5);
+    assert(gottenDog2.getPhotograph() == "photome");
+    assert(repo.isDog("Pomerian", "Pufi"));
+    assert(!repo.isDog("Pomerian", "Pufion"));
+    assert(repo.removeDog("Pomerian", "Pufi"));
+    assert(!repo.removeDog("Pomerian", "Pufi"));
+    Dog dog3 = repo.getDogs()[0];
+    assert(dog3.getBreed() == dog1.getBreed());
+    assert(dog3.getName() == dog1.getName());
+    assert(dog3.getAge() == dog1.getAge());
+    assert(dog3.getPhotograph() == dog1.getPhotograph());
+    remove("test.html");
+}
 void TestService() {
     Repository repo{};
     Repository repo2{};
@@ -85,9 +142,37 @@ void TestService() {
     assert(gottenDog2.getName() == "Buffy");
     assert(gottenDog2.getAge() == 7);
     assert(gottenDog2.getPhotograph() == "abap");
+
+    try{
+        service.addDog("","Un Nume", 80, "poza");
+        assert(false);
+    }catch(InvalidDogException &e){
+        assert(true);
+    }
+
+    try{
+        service.addDog("Breeed","", 80, "poza");
+        assert(false);
+    }catch(InvalidDogException &e){
+        assert(true);
+    }
+
+    try{
+        service.addDog("Balan","Un Nume", -10, "poza");
+        assert(false);
+    }catch(InvalidDogException &e){
+        assert(true);
+    }
+
+    try{
+        service.addDog("ahhaaa","Un Nume", 80, "");
+        assert(false);
+    }catch(InvalidDogException &e){
+        assert(true);
+    }
 }
 
-void TestServiceAdoptionModule(){
+void TestServiceAdoptionModule() {
     Repository repo{};
     Repository adoptRepo{};
     Service service{repo, adoptRepo};

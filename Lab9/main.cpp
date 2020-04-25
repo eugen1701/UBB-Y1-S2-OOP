@@ -9,6 +9,8 @@
 int main() {
     TestDomain();
     TestRepository();
+    TestFileRepository();
+    TestHtmlRepository();
     TestService();
     TestServiceAdoptionModule();
     std::string file;

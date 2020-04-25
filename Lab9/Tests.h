@@ -6,6 +6,8 @@
 #define LAB5_TESTS_H
 void TestDomain();
 void TestRepository();
+void TestFileRepository();
+void TestHtmlRepository();
 void TestService();
 void TestServiceAdoptionModule();
 #endif // LAB5_TESTS_H
