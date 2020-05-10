@@ -51,5 +51,8 @@ class Service {
     bool isDogAdopted(const std::string &breed, const std::string &name);
     /// Get all the dogs in the adoption list
     std::vector<Dog> getAdoptedDogs();
+
+  private:
+    void sync();
 };
 #endif // LAB5_SERVICE_H

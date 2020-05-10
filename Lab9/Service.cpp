@@ -5,17 +5,20 @@
 #include "Service.h"
 #include "DogValidator.h"
 bool Service::addDog(const std::string &breed, const std::string &name, int age, const std::string &photograph) {
+    Dog *dog = new Dog(breed, name, age, photograph);
+    DogValidator::validate(*dog);
     if (this->repository.isDog(breed, name)) {
         return false;
     }
-    Dog *dog = new Dog(breed, name, age, photograph);
-    DogValidator::validate(*dog);
     this->repository.addDog(*dog);
     delete dog;
+    sync();
     return true;
 }
 bool Service::removeDog(const std::string &breed, const std::string &name) {
-    return this->repository.removeDog(breed, name);
+    auto result = this->repository.removeDog(breed, name);
+    sync();
+    return result;
 }
 std::string Service::listDogs() {
     auto dogs = this->repository.getDogs();
@@ -40,6 +43,7 @@ bool Service::updateDog(const std::string &breed, const std::string &name, int a
     }
     DogValidator::validate(dog);
     this->repository.addDog(dog);
+    sync();
     return true;
 }
 std::vector<Dog> Service::filterDogs(const std::string &breed, int age) {
@@ -68,4 +72,17 @@ bool Service::isDogAdopted(const std::string &breed, const std::string &name) {
 }
 std::vector<Dog> Service::getAdoptedDogs() {
     return this->adoptedRepo.getDogs();
+}
+
+void Service::sync() {
+    auto dogs = adoptedRepo.getDogs();
+    for (auto &dog : dogs) {
+        if(repository.isDog(dog.getBreed(), dog.getName())){
+            auto original_dog = repository.getDog(dog.getBreed(), dog.getName());
+            adoptedRepo.removeDog(dog.getBreed(), dog.getName());
+            adoptedRepo.addDog(original_dog);
+        }else{
+            adoptedRepo.removeDog(dog.getBreed(), dog.getName());
+        }
+    }
 }

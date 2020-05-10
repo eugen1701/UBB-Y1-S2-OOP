@@ -25,7 +25,7 @@ void TestDomain() {
     auto dogRef = &dog;
     dog = dog;
     assert(&dog == dogRef);
-    assert(dog.toString() == "Labrador Anusca 3 photo");
+    assert(dog.toString() == "Labrador, Anusca, 3, photo");
     dog.setAge(4);
     assert(dog.getAge() == 4);
     dog.setPhotograph("ceapa cu mere");
