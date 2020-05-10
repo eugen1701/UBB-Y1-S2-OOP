@@ -1,1 +1,2 @@
 Labrador,Gigel,7,poza
+Beagle,Joynny,3,poza

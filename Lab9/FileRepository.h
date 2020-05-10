@@ -23,6 +23,7 @@ class FileRepository : public Repository {
     bool removeDog(const std::string &breed, const std::string &name) override;
     bool isDog(const std::string &breed, const std::string &name) override;
     virtual std::vector<Dog> getDogs() const override;
+    virtual ~FileRepository() {}
 };
 
 #endif // LAB8_FILEREPOSITORY_H
