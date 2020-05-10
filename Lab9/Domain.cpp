@@ -21,7 +21,7 @@ Dog::Dog(const Dog &other_dog) {
 void Dog::setAge(int new_age) { this->age = new_age; }
 void Dog::setPhotograph(const std::string &new_photograph) { this->photograph = new_photograph; }
 std::string Dog::toString() const {
-    return this->breed + " " + this->name + " " + std::to_string(this->age) + " " + this->photograph;
+    return this->breed + ", " + this->name + ", " + std::to_string(this->age) + ", " + this->photograph;
 }
 Dog &Dog::operator=(const Dog &other_dog) {
     if (this == &other_dog) {
