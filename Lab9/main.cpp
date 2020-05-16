@@ -11,6 +11,7 @@
 #include <QtWidgets/QLabel>
 #include <iostream>
 #include <regex>
+#include <yaml-cpp/yaml.h>
 
 int main(int argc, char *argv[]) {
     TestDomain();
@@ -42,30 +43,38 @@ int main(int argc, char *argv[]) {
 //    UI ui{service, file};
 //    ui.run();
 //    delete adoptedRepo;
+    auto config = YAML::LoadFile("config.yml");
     QApplication a(argc, argv);
-    auto fileDialog = new FileDialogBox();
-    auto result = fileDialog->exec();
-    if(result == 0){
+    Repository *adoptedRepo;
+    if(config["fileRepo"] && config["fileRepo"].as<bool>()){
+        auto fileDialog = new FileDialogBox();
+        auto result = fileDialog->exec();
+        if(result == 0){
+            delete fileDialog;
+            return 0;
+        }
+        auto fileName = fileDialog->getFileName();
         delete fileDialog;
-        return 0;
+        if(std::regex_match(fileName, std::regex(".*\\.txt$"))){
+            adoptedRepo = new FileRepository(fileName);
+        }else if(std::regex_match(fileName, std::regex(".*\\.html$"))){
+            adoptedRepo = new HtmlRepository(fileName);
+        }
+        else{
+            QMessageBox::critical(nullptr, "Wrong extension!", "File type and extension is not supported!");
+            return 1;
+        }
+    }else{
+        adoptedRepo = new Repository();
     }
-    auto fileName = fileDialog->getFileName();
-    delete fileDialog;
-    FileRepository *adoptedRepo;
-    if(std::regex_match(fileName, std::regex(".*\\.txt$"))){
-        adoptedRepo = new FileRepository(fileName);
-    }else if(std::regex_match(fileName, std::regex(".*\\.html$"))){
-        adoptedRepo = new HtmlRepository(fileName);
+    int res;
+    {
+        FileRepository repo{"dogs.txt"};
+        Service service{repo, *adoptedRepo};
+        MainWindow *window = new MainWindow(service);
+        window->show();
+        res = a.exec();
+        delete adoptedRepo;
     }
-    else{
-        QMessageBox::critical(nullptr, "Wrong extension!", "File type and extension is not supported!");
-        return 1;
-    }
-    FileRepository repo{"dogs.txt"};
-    Service service{repo, *adoptedRepo};
-    MainWindow* window = new MainWindow(service);
-    window->show();
-    int res = a.exec();
-    delete adoptedRepo;
     return res;
 }

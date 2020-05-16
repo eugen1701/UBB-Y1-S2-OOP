@@ -12,6 +12,7 @@ class Repository {
 
   public:
     Repository() = default;
+    virtual ~Repository() {};
     /// Adds a dog to the repository, doesn't care about duplicates or uniqueness
     /// \param dog the dog to add
     virtual void addDog(Dog &dog);
