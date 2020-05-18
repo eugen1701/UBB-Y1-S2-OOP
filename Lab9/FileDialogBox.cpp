@@ -3,14 +3,16 @@
 //
 
 #include "FileDialogBox.h"
-#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
 void FileDialogBox::setup() {
     auto mainLayout = new QVBoxLayout(this);
     auto button_layout = new QHBoxLayout();
     auto cancel_button = new QPushButton("Cancel");
     auto ok_button = new QPushButton("Ok");
     fileName = new QLineEdit();
+    mainLayout->addWidget(new QLabel("Enter File Name for storage: "));
     mainLayout->addWidget(fileName);
     mainLayout->addLayout(button_layout);
     button_layout->addWidget(cancel_button);

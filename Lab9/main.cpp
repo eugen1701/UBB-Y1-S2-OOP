@@ -5,7 +5,6 @@
 #include "MainWindow.h"
 #include "Service.h"
 #include "Tests.h"
-#include "UI.h"
 #include <QApplication>
 #include <QDebug>
 #include <QtWidgets/QLabel>

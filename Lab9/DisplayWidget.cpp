@@ -61,8 +61,8 @@ void DisplayWidget::setupAdoptedLayout(QVBoxLayout *layout) {
     layout->addWidget(all_adopted_dogs);
     QHBoxLayout *h_layout = new QHBoxLayout();
     layout->addLayout(h_layout);
-    h_layout->addWidget(new QPushButton("Save"));
-    h_layout->addWidget(new QPushButton("Clear"));
+//    h_layout->addWidget(new QPushButton("Save"));
+//    h_layout->addWidget(new QPushButton("Clear"));
 }
 
 void DisplayWidget::setupMiddleLayout(QVBoxLayout *layout) {
@@ -128,6 +128,7 @@ void DisplayWidget::deleteHandler() {
     }
     auto item = (DogListWidgetItem *)all_dogs->selectedItems().at(0);
     service.removeDog(item->getBreed(), item->getName());
+    emit dogRemoveSignal(item->getBreed(), item->getName());
     emit updatedDatabaseSignal();
 }
 

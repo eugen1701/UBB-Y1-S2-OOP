@@ -48,6 +48,7 @@ class DisplayWidget : public QWidget {
   signals:
     void dogAddSignal(std::string breed, std::string name, int age, std::string photograph);
     void updatedDatabaseSignal(std::string breed = "", int age = INT_MAX);
+    void dogRemoveSignal(std::string breed, std::string name);
   public slots:
     void dogAddSlot(std::string breed, std::string name, int age, std::string photograph);
     void updatedDatabaseSlot(std::string breed, int age);

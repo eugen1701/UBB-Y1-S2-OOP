@@ -28,7 +28,6 @@ std::map<std::string, int> ChartWidget::getStatistics(std::vector<Dog> dogs){
         if(it != breedCount.end()){
             //TODO test iterator second add
             breedCount[dog.getBreed()]++;
-            qDebug() << dog.getBreed().c_str() << ":" << breedCount[dog.getBreed()];
         }else{
             breedCount[dog.getBreed()] = 1;
         }
