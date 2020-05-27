@@ -1,0 +1,6 @@
+Mercedes-Benz|SUV|2013|blue
+Fiat|Bravo|2007|red
+Jaguar|Pantera|2020|green
+Mitsubishi|Impreza|2015|yellow
+Mazda|Furious|2002|magenta
+Mazda|Banana|2003|yellow
