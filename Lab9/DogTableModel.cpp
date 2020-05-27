@@ -54,16 +54,20 @@ bool DogTableModel::insertRows(int row, int count, const QModelIndex &parent) {
     if(row > rowCount() || row < 0){
         return false;
     }
+    emit layoutAboutToBeChanged();
     beginInsertRows(parent, row, row+count);
     endInsertRows();
+    emit layoutChanged();
     return true;
 }
 bool DogTableModel::removeRows(int row, int count, const QModelIndex &parent) {
     if(row > rowCount() || row < 0){
         return false;
     }
+    emit layoutAboutToBeChanged();
     beginRemoveRows(parent, row, row+count);
     endRemoveRows();
+    emit layoutChanged();
     return true;
 }
 void DogTableModel::addDog() {

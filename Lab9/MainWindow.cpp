@@ -11,19 +11,21 @@
 #include <string>
 
 void MainWindow::setup() {
-    auto mainLayout = new QHBoxLayout();
-    auto tabWidget = new QTabWidget();
     auto displayWidget = new DisplayWidget(service);
     auto chartWidget = new ChartWidget(service);
     auto dogTableView = new QTableView();
+    auto sortedTableView = new QTableView();
     auto dogTableModel = new DogTableModel(service);
+    auto sortedTableModel = new QSortFilterProxyModel();
+    sortedTableModel->setSourceModel(dogTableModel);
+    sortedTableView->setModel(sortedTableModel);
+    sortedTableView->setSortingEnabled(true);
     dogTableView->setModel(dogTableModel);
     QObject::connect(displayWidget, &DisplayWidget::updatedDatabaseSignal, chartWidget, &ChartWidget::updateChart);
     QObject::connect(displayWidget, &DisplayWidget::dogAddSignal, dogTableModel, &DogTableModel::addDog);
     QObject::connect(displayWidget, &DisplayWidget::dogRemoveSignal, dogTableModel, &DogTableModel::removeDog);
-    tabWidget->addTab(displayWidget, "Dogs");
-    tabWidget->addTab(chartWidget, "Chart");
-    tabWidget->addTab(dogTableView, "Dog Tables");
-    mainLayout->addWidget(tabWidget);
-    this->setLayout(mainLayout);
+    window.tabWidget->addTab(displayWidget, "Dogs");
+    window.tabWidget->addTab(chartWidget, "Chart");
+    window.tabWidget->addTab(dogTableView, "Dog Tables");
+    window.tabWidget->addTab(sortedTableView, "Sorted Dog Tables");
 }

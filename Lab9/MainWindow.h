@@ -14,16 +14,19 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include <limits>
-class MainWindow : public QWidget {
+#include <ui_mainWindow.h>
+class MainWindow : public QMainWindow {
     Q_OBJECT
   public:
     MainWindow(Service &service, QWidget *parent = nullptr) : service(service) {
+        window.setupUi(this);
         setup();
     }
     ~MainWindow() {
     }
 
   private:
+    Ui::MainWindow window;
     Service &service;
     void setup();
 };
