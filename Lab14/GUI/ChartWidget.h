@@ -5,7 +5,7 @@
 #ifndef LAB9_CHARTWIDGET_H
 #define LAB9_CHARTWIDGET_H
 
-#include "Service.h"
+#include "../Service.h"
 #include <QtCharts>
 #include <QtWidgets/QWidget>
 class ChartWidget : public QWidget {

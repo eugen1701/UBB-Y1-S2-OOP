@@ -5,7 +5,7 @@
 #ifndef LAB9_MAINWINDOW_H
 #define LAB9_MAINWINDOW_H
 
-#include "Service.h"
+#include "../Service.h"
 #include <QtWidgets/QErrorMessage>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>

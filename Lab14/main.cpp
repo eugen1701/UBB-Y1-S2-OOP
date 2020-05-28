@@ -1,8 +1,8 @@
 #include "Domain.h"
 #include "FileDialogBox.h"
 #include "FileRepository.h"
+#include "GUI/MainWindow.h"
 #include "HtmlRepository.h"
-#include "MainWindow.h"
 #include "Service.h"
 #include "Tests.h"
 #include <QApplication>

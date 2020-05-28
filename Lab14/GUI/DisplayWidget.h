@@ -5,7 +5,7 @@
 #ifndef LAB9_DISPLAYWIDGET_H
 #define LAB9_DISPLAYWIDGET_H
 
-#include "Service.h"
+#include "../Service.h"
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QPushButton>

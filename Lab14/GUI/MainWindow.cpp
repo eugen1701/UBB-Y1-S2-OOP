@@ -3,9 +3,9 @@
 //
 
 #include "MainWindow.h"
+#include "../DogTableModel.h"
 #include "ChartWidget.h"
 #include "DisplayWidget.h"
-#include "DogTableModel.h"
 #include <QDebug>
 #include <QtWidgets/QListWidget>
 #include <string>
