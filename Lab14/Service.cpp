@@ -77,11 +77,11 @@ std::vector<Dog> Service::getAdoptedDogs() {
 void Service::sync() {
     auto dogs = adoptedRepo.getDogs();
     for (auto &dog : dogs) {
-        if(repository.isDog(dog.getBreed(), dog.getName())){
+        if (repository.isDog(dog.getBreed(), dog.getName())) {
             auto original_dog = repository.getDog(dog.getBreed(), dog.getName());
             adoptedRepo.removeDog(dog.getBreed(), dog.getName());
             adoptedRepo.addDog(original_dog);
-        }else{
+        } else {
             adoptedRepo.removeDog(dog.getBreed(), dog.getName());
         }
     }
