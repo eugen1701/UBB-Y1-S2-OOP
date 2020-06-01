@@ -172,6 +172,8 @@ void DisplayWidget::filterHandler() {
     if (!age_str.isEmpty()) {
         age = age_str.toInt();
     }
+    lastFilterBreed = breed;
+    lastFilterAge = age;
     emit updatedDatabaseSignal(breed, age);
 }
 
@@ -219,4 +221,7 @@ void DisplayWidget::unadoptHandler() {
         return;
     }
     emit updatedDatabaseSignal();
+}
+void DisplayWidget::refreshViews() {
+    updatedDatabaseSlot(lastFilterBreed, lastFilterAge);
 }

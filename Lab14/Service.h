@@ -5,10 +5,15 @@
 #ifndef LAB5_SERVICE_H
 #define LAB5_SERVICE_H
 #include "Repository.h"
+#include <vector>
+#include "Action.h"
+#include <memory>
 class Service {
   private:
     Repository &repository;
     Repository &adoptedRepo;
+    std::vector<std::unique_ptr<Action>> undoStack;
+    std::vector<std::unique_ptr<Action>> redoStack;
 
   public:
     explicit Service(Repository &repo, Repository &adoptedRepo) : repository(repo), adoptedRepo(adoptedRepo) {}
@@ -52,6 +57,9 @@ class Service {
     /// Get all the dogs in the adoption list
     std::vector<Dog> getAdoptedDogs();
 
+    bool executeUndo();
+    bool executeRedo();
+    void something(Action::ExecutedAction aha) {};
   private:
     void sync();
 };

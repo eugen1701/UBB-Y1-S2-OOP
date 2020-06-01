@@ -4,6 +4,7 @@
 #include "GUI/MainWindow.h"
 #include "HtmlRepository.h"
 #include "Service.h"
+#include "SubjectRepo.h"
 #include "Tests.h"
 #include <QApplication>
 #include <QDebug>
@@ -69,8 +70,10 @@ int main(int argc, char *argv[]) {
     int res;
     {
         FileRepository repo{"dogs.txt"};
-        Service service{repo, *adoptedRepo};
-        MainWindow *window = new MainWindow(service);
+        SubjectRepo firstRepo{repo};
+        SubjectRepo secondRepo{*adoptedRepo};
+        Service service{firstRepo, secondRepo};
+        MainWindow *window = new MainWindow(service,firstRepo,secondRepo);
         window->show();
         res = a.exec();
         delete adoptedRepo;

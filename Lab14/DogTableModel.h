@@ -6,7 +6,11 @@
 #define LAB9_DOGTABLEMODEL_H
 
 #include "Service.h"
+#include "SubjectRepo.h"
 #include <QtCore/QAbstractTableModel>
+#include <QtGui/QPainter>
+#include <QtWidgets/QStyleOptionViewItem>
+#include <QtWidgets/QStyledItemDelegate>
 class DogTableModel : public QAbstractTableModel {
   private:
     Service &service;
@@ -23,6 +27,7 @@ class DogTableModel : public QAbstractTableModel {
   public slots:
     void addDog();
     void removeDog();
+    void actionReaction(Action::ExecutedAction action);
 };
 
 #endif // LAB9_DOGTABLEMODEL_H

@@ -21,11 +21,35 @@ void MainWindow::setup() {
     sortedTableView->setModel(sortedTableModel);
     sortedTableView->setSortingEnabled(true);
     dogTableView->setModel(dogTableModel);
-    QObject::connect(displayWidget, &DisplayWidget::updatedDatabaseSignal, chartWidget, &ChartWidget::updateChart);
-    QObject::connect(displayWidget, &DisplayWidget::dogAddSignal, dogTableModel, &DogTableModel::addDog);
-    QObject::connect(displayWidget, &DisplayWidget::dogRemoveSignal, dogTableModel, &DogTableModel::removeDog);
+    dogTableView->setItemDelegateForColumn(3, new ImageDelegate());
     window.tabWidget->addTab(displayWidget, "Dogs");
     window.tabWidget->addTab(chartWidget, "Chart");
     window.tabWidget->addTab(dogTableView, "Dog Tables");
     window.tabWidget->addTab(sortedTableView, "Sorted Dog Tables");
+    createActions();
+    dogs.registerCallback(chartWidget, &ChartWidget::updateChart);
+    dogs.registerCallback(dogTableModel, &DogTableModel::actionReaction);
+    dogs.registerCallback(displayWidget, &DisplayWidget::refreshViews);
+}
+void MainWindow::createActions() {
+    window.actionUndo->setShortcut(QKeySequence::Undo);
+    window.actionUndo->setStatusTip(tr("Undo Last Action"));
+    QObject::connect(window.actionUndo, &QAction::triggered, this, &MainWindow::undo);
+    window.actionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
+    window.actionRedo->setStatusTip(tr("Redo Last Action"));
+    QObject::connect(window.actionRedo, &QAction::triggered, this, &MainWindow::redo);
+}
+void MainWindow::undo() {
+    if (service.executeUndo()) {
+        statusBar()->showMessage(tr("Undo Successful"));
+    } else {
+        statusBar()->showMessage(tr("Undo Failed"));
+    }
+}
+void MainWindow::redo() {
+    if (service.executeRedo()) {
+        statusBar()->showMessage(tr("Redo Successful"));
+    } else {
+        statusBar()->showMessage(tr("Redo Failed"));
+    }
 }

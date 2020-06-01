@@ -76,3 +76,13 @@ void DogTableModel::addDog() {
 void DogTableModel::removeDog() {
     removeRows(rowCount()-1, 0);
 }
+void DogTableModel::actionReaction(Action::ExecutedAction action) {
+    if(action == Action::ExecutedAction::added){
+        addDog();
+    }else if(action == Action::ExecutedAction::removed){
+        removeDog();
+    }else if(action == Action::ExecutedAction::updated){
+        addDog();
+        removeDog();
+    }
+}

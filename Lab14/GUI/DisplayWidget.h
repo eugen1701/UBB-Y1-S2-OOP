@@ -44,6 +44,8 @@ class DisplayWidget : public QWidget {
     void setupAdoptedLayout(QVBoxLayout *layout);
     void setupMiddleLayout(QVBoxLayout *layout);
     void initializeConnections();
+    std::string lastFilterBreed = "";
+    int lastFilterAge = INT_MAX;
 
   signals:
     void dogAddSignal(std::string breed, std::string name, int age, std::string photograph);
@@ -53,6 +55,7 @@ class DisplayWidget : public QWidget {
     void dogAddSlot(std::string breed, std::string name, int age, std::string photograph);
     void updatedDatabaseSlot(std::string breed, int age);
     void populateViews();
+    void refreshViews();
 };
 
 class DogListWidgetItem : public QListWidgetItem, public Dog {

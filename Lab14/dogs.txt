@@ -4,6 +4,9 @@ Chuuaua,Min,10,poza
 Husky,Maxi,5,poza
 Beagle,Joynny,3,poza
 Terrier,Stick,5,poza
+Banana,Macana,12,aaa
+Pretzel,AAA,88888888,aaa
+Spaniel,Linguini,1,aaa
 Pomeranian,Pufi,3,poza
 Labrador,Antonio,6,aaa
 Spaniel,Linguini,1,aaa

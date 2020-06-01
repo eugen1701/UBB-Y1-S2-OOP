@@ -11,11 +11,17 @@ bool Service::addDog(const std::string &breed, const std::string &name, int age,
         return false;
     }
     this->repository.addDog(*dog);
+    undoStack.push_back(std::make_unique<ActionAdd>(repository, *dog));
     delete dog;
     sync();
     return true;
 }
 bool Service::removeDog(const std::string &breed, const std::string &name) {
+    if (!this->repository.isDog(breed, name)) {
+        return false;
+    }
+    Dog dog = this->repository.getDog(breed, name);
+    undoStack.push_back(std::make_unique<ActionRemove>(repository, dog));
     auto result = this->repository.removeDog(breed, name);
     sync();
     return result;
@@ -35,6 +41,8 @@ bool Service::updateDog(const std::string &breed, const std::string &name, int a
     }
     auto dog = this->repository.getDog(breed, name);
     this->repository.removeDog(breed, name);
+    DogValidator::validate(dog);
+    Dog originalDog = dog;
     if (age != 0) {
         dog.setAge(age);
     }
@@ -42,6 +50,7 @@ bool Service::updateDog(const std::string &breed, const std::string &name, int a
         dog.setPhotograph(photograph);
     }
     DogValidator::validate(dog);
+    undoStack.push_back(std::make_unique<ActionUpdate>(repository, originalDog, dog));
     this->repository.addDog(dog);
     sync();
     return true;
@@ -62,9 +71,15 @@ bool Service::adoptDog(Dog dog) {
     }
     DogValidator::validate(dog);
     this->adoptedRepo.addDog(dog);
+    undoStack.push_back(std::make_unique<ActionAdd>(adoptedRepo, dog));
     return true;
 }
 bool Service::unadoptDog(const std::string &breed, const std::string &name) {
+    if (!this->adoptedRepo.isDog(breed, name)) {
+        return false;
+    }
+    Dog dog = this->adoptedRepo.getDog(breed, name);
+    undoStack.push_back(std::make_unique<ActionRemove>(adoptedRepo, dog));
     return this->adoptedRepo.removeDog(breed, name);
 }
 bool Service::isDogAdopted(const std::string &breed, const std::string &name) {
@@ -72,6 +87,24 @@ bool Service::isDogAdopted(const std::string &breed, const std::string &name) {
 }
 std::vector<Dog> Service::getAdoptedDogs() {
     return this->adoptedRepo.getDogs();
+}
+bool Service::executeUndo() {
+    if (undoStack.empty())
+        return false;
+    std::unique_ptr<Action> action = std::move(undoStack.back());
+    undoStack.pop_back();
+    action->executeUndo();
+    redoStack.push_back(move(action));
+    return true;
+}
+bool Service::executeRedo() {
+    if (redoStack.empty())
+        return false;
+    std::unique_ptr<Action> action = std::move(redoStack.back());
+    redoStack.pop_back();
+    action->executeRedo();
+    undoStack.push_back(move(action));
+    return true;
 }
 
 void Service::sync() {
