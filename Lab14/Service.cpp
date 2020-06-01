@@ -21,8 +21,8 @@ bool Service::removeDog(const std::string &breed, const std::string &name) {
         return false;
     }
     Dog dog = this->repository.getDog(breed, name);
-    addUndo(std::make_unique<ActionRemove>(repository, dog));
     auto result = this->repository.removeDog(breed, name);
+    addUndo(std::make_unique<ActionRemove>(repository, dog));
     sync();
     return result;
 }
@@ -94,6 +94,7 @@ bool Service::executeUndo() {
     std::unique_ptr<Action> action = std::move(undoStack.back());
     undoStack.pop_back();
     action->executeUndo();
+    sync();
     redoStack.push_back(move(action));
     return true;
 }
@@ -103,6 +104,7 @@ bool Service::executeRedo() {
     std::unique_ptr<Action> action = std::move(redoStack.back());
     redoStack.pop_back();
     action->executeRedo();
+    sync();
     undoStack.push_back(move(action));
     return true;
 }
@@ -120,7 +122,18 @@ void Service::sync() {
             adoptedRepo.removeDog(dog.getBreed(), dog.getName());
             adoptedRepo.addDog(original_dog);
         } else {
+            Dog doggo = adoptedRepo.getDog(dog.getBreed(), dog.getName());
             adoptedRepo.removeDog(dog.getBreed(), dog.getName());
+            wasAdopted.push_back(doggo);
+        }
+    }
+    for(auto i = wasAdopted.begin(); i != wasAdopted.end();){
+        auto doggo = &*i;
+        if (repository.isDog(doggo->getBreed(), doggo->getName())){
+            adoptedRepo.addDog(*doggo);
+            wasAdopted.erase(i);
+        }else{
+            ++i;
         }
     }
 }

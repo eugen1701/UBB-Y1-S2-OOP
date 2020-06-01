@@ -9,4 +9,3 @@ Pretzel,AAA,88888888,aaa
 Spaniel,Linguini,1,aaa
 Pomeranian,Pufi,3,poza
 Labrador,Antonio,6,aaa
-Spaniel,Linguini,1,aaa

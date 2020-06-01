@@ -14,6 +14,7 @@ class Service {
     Repository &adoptedRepo;
     std::vector<std::unique_ptr<Action>> undoStack;
     std::vector<std::unique_ptr<Action>> redoStack;
+    std::vector<Dog> wasAdopted;
 
   public:
     explicit Service(Repository &repo, Repository &adoptedRepo) : repository(repo), adoptedRepo(adoptedRepo) {}
