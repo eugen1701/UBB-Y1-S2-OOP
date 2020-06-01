@@ -1,26 +1,26 @@
 //
-// Created by sweethuman on 16.05.2020.
+// Created by sweethuman on 01.06.2020.
 //
 
-#include "DogTableModel.h"
-int DogTableModel::rowCount(const QModelIndex &parent) const {
-    return service.getDogs().size();
+#include "AdoptedDogTableModel.h"
+int AdoptedDogTableModel::rowCount(const QModelIndex &parent) const {
+    return service.getAdoptedDogs().size();
 }
 
-int DogTableModel::columnCount(const QModelIndex &parent) const {
+int AdoptedDogTableModel::columnCount(const QModelIndex &parent) const {
     return 4;
 }
-QVariant DogTableModel::data(const QModelIndex &index, int role) const {
+QVariant AdoptedDogTableModel::data(const QModelIndex &index, int role) const {
     switch (role) {
     case Qt::DisplayRole: {
-        auto dog = service.getDogs()[index.row()];
+        auto dog = service.getAdoptedDogs()[index.row()];
         return QVariant(QString::fromStdString(dogProperty(dog, index.column())));
     }
     default:
         return QVariant();
     }
 }
-std::string DogTableModel::dogProperty(Dog &dog, int column) const {
+std::string AdoptedDogTableModel::dogProperty(Dog &dog, int column) const {
     switch (column) {
     case 0:
         return dog.getBreed();
@@ -35,7 +35,7 @@ std::string DogTableModel::dogProperty(Dog &dog, int column) const {
     }
 }
 
-QVariant DogTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant AdoptedDogTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         switch (section) {
         case 0:
@@ -50,7 +50,7 @@ QVariant DogTableModel::headerData(int section, Qt::Orientation orientation, int
     }
     return QVariant();
 }
-bool DogTableModel::insertRows(int row, int count, const QModelIndex &parent) {
+bool AdoptedDogTableModel::insertRows(int row, int count, const QModelIndex &parent) {
     if(row > rowCount() || row < 0){
         return false;
     }
@@ -60,7 +60,7 @@ bool DogTableModel::insertRows(int row, int count, const QModelIndex &parent) {
     emit layoutChanged();
     return true;
 }
-bool DogTableModel::removeRows(int row, int count, const QModelIndex &parent) {
+bool AdoptedDogTableModel::removeRows(int row, int count, const QModelIndex &parent) {
     if(row > rowCount() || row < 0){
         return false;
     }
@@ -70,13 +70,13 @@ bool DogTableModel::removeRows(int row, int count, const QModelIndex &parent) {
     emit layoutChanged();
     return true;
 }
-void DogTableModel::addDog() {
+void AdoptedDogTableModel::addDog() {
     insertRows(rowCount()-1,0);
 }
-void DogTableModel::removeDog() {
+void AdoptedDogTableModel::removeDog() {
     removeRows(rowCount(), 0);
 }
-void DogTableModel::actionReaction(Action::ExecutedAction action) {
+void AdoptedDogTableModel::actionReaction(Action::ExecutedAction action) {
     if(action == Action::ExecutedAction::added){
         addDog();
     }else if(action == Action::ExecutedAction::removed){

@@ -3,6 +3,7 @@
 //
 
 #include "MainWindow.h"
+#include "../AdoptedDogTableModel.h"
 #include "../DogTableModel.h"
 #include "ChartWidget.h"
 #include "DisplayWidget.h"
@@ -22,6 +23,7 @@ void MainWindow::setup() {
     sortedTableView->setSortingEnabled(true);
     dogTableView->setModel(dogTableModel);
     dogTableView->setItemDelegateForColumn(3, new ImageDelegate());
+    sortedTableView->setItemDelegateForColumn(3, new ImageDelegate());
     window.tabWidget->addTab(displayWidget, "Dogs");
     window.tabWidget->addTab(chartWidget, "Chart");
     window.tabWidget->addTab(dogTableView, "Dog Tables");
@@ -30,6 +32,14 @@ void MainWindow::setup() {
     dogs.registerCallback(chartWidget, &ChartWidget::updateChart);
     dogs.registerCallback(dogTableModel, &DogTableModel::actionReaction);
     dogs.registerCallback(displayWidget, &DisplayWidget::refreshViews);
+    auto tempAdoptedModel = new AdoptedDogTableModel(service);
+    adoptedDogs.registerCallback(displayWidget, &DisplayWidget::refreshViews);
+    adoptedDogs.registerCallback(tempAdoptedModel, &AdoptedDogTableModel::actionReaction);
+    auto adoptedTableModel = new QSortFilterProxyModel();
+    adoptedTableModel->setSourceModel(tempAdoptedModel);
+    adoptedWidget = new AdoptedDogsWidget(adoptedTableModel, this);
+    adoptedWidget->show();
+
 }
 void MainWindow::createActions() {
     window.actionUndo->setShortcut(QKeySequence::Undo);

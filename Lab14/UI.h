@@ -26,5 +26,7 @@ class UI {
     void userUI();
     void adoptDogs(const std::vector<Dog> &dogs);
     void printAdoptionMenu();
+    void undo();
+    void redo();
 };
 #endif // LAB5_UI_H

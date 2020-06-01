@@ -59,8 +59,8 @@ class Service {
 
     bool executeUndo();
     bool executeRedo();
-    void something(Action::ExecutedAction aha) {};
   private:
     void sync();
+    void addUndo(std::unique_ptr<Action> action);
 };
 #endif // LAB5_SERVICE_H

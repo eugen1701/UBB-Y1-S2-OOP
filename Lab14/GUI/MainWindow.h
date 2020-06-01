@@ -45,9 +45,9 @@ class AdoptedDogsWidget : public QDialog {
         QHeaderView *verticalHeader = this->view->verticalHeader();
         verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
         verticalHeader->setDefaultSectionSize(200);
-        this->view->setColumnWidth(4, 200);
+        this->view->setColumnWidth(3, 200);
         layout->addWidget(this->view);
-        this->view->setItemDelegateForColumn(4, new ImageDelegate);
+        this->view->setItemDelegateForColumn(3, new ImageDelegate);
     }
 };
 

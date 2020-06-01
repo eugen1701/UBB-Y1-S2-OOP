@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 add_executable(Lab14 main.cpp Domain.cpp Domain.h Repository.cpp Repository.h Service.cpp Service.h Tests.cpp
         Tests.h FileRepository.cpp FileRepository.h DogValidator.cpp DogValidator.h HtmlRepository.cpp HtmlRepository.h
         GUI/MainWindow.cpp GUI/MainWindow.h FileDialogBox.cpp FileDialogBox.h GUI/DisplayWidget.cpp GUI/DisplayWidget.h GUI/ChartWidget.cpp
-        GUI/ChartWidget.h DogTableModel.cpp DogTableModel.h Action.h Action.cpp SubjectRepo.cpp SubjectRepo.h)
+        GUI/ChartWidget.h DogTableModel.cpp DogTableModel.h Action.h Action.cpp SubjectRepo.cpp SubjectRepo.h AdoptedDogTableModel.cpp AdoptedDogTableModel.h)
 
 target_link_libraries(Lab14 PUBLIC
         Qt5::Core

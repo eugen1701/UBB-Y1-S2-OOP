@@ -11,7 +11,7 @@ bool Service::addDog(const std::string &breed, const std::string &name, int age,
         return false;
     }
     this->repository.addDog(*dog);
-    undoStack.push_back(std::make_unique<ActionAdd>(repository, *dog));
+    addUndo(std::make_unique<ActionAdd>(repository, *dog));
     delete dog;
     sync();
     return true;
@@ -21,7 +21,7 @@ bool Service::removeDog(const std::string &breed, const std::string &name) {
         return false;
     }
     Dog dog = this->repository.getDog(breed, name);
-    undoStack.push_back(std::make_unique<ActionRemove>(repository, dog));
+    addUndo(std::make_unique<ActionRemove>(repository, dog));
     auto result = this->repository.removeDog(breed, name);
     sync();
     return result;
@@ -50,7 +50,7 @@ bool Service::updateDog(const std::string &breed, const std::string &name, int a
         dog.setPhotograph(photograph);
     }
     DogValidator::validate(dog);
-    undoStack.push_back(std::make_unique<ActionUpdate>(repository, originalDog, dog));
+    addUndo(std::make_unique<ActionUpdate>(repository, originalDog, dog));
     this->repository.addDog(dog);
     sync();
     return true;
@@ -71,7 +71,7 @@ bool Service::adoptDog(Dog dog) {
     }
     DogValidator::validate(dog);
     this->adoptedRepo.addDog(dog);
-    undoStack.push_back(std::make_unique<ActionAdd>(adoptedRepo, dog));
+    addUndo(std::make_unique<ActionAdd>(adoptedRepo, dog));
     return true;
 }
 bool Service::unadoptDog(const std::string &breed, const std::string &name) {
@@ -79,7 +79,7 @@ bool Service::unadoptDog(const std::string &breed, const std::string &name) {
         return false;
     }
     Dog dog = this->adoptedRepo.getDog(breed, name);
-    undoStack.push_back(std::make_unique<ActionRemove>(adoptedRepo, dog));
+    addUndo(std::make_unique<ActionRemove>(adoptedRepo, dog));
     return this->adoptedRepo.removeDog(breed, name);
 }
 bool Service::isDogAdopted(const std::string &breed, const std::string &name) {
@@ -105,6 +105,11 @@ bool Service::executeRedo() {
     action->executeRedo();
     undoStack.push_back(move(action));
     return true;
+}
+
+void Service::addUndo(std::unique_ptr<Action> action){
+    redoStack.clear();
+    undoStack.push_back(std::move(action));
 }
 
 void Service::sync() {

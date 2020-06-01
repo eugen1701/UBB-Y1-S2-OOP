@@ -5,6 +5,10 @@
 #include "UI.h"
 #include "DogValidator.h"
 #include <iostream>
+#include <string>
+#ifdef _WIN64
+#include <windows.h>
+#endif
 
 using namespace std;
 
@@ -75,6 +79,12 @@ void UI::adminUI() {
             listDogs();
             break;
         case 5:
+            undo();
+            break;
+        case 6:
+            redo();
+            break;
+        case 7:
             return;
         default:
             break;
@@ -109,14 +119,20 @@ void UI::userUI() {
         } break;
         case 4:
 #ifdef _WIN64
-            // TODO implement for windows
+            char buffer[MAX_PATH];
+            GetModuleFileName(NULL, buffer, MAX_PATH);
+            string::size_type pos = string(buffer).find_last_of("\\/");
+            string path = string(buffer).substr(0, pos);
+            path += "/";
+            path += fileName;
+            system(path.c_str());
 #endif
 #ifdef linux
-        {
-            std::string open = "xdg-open ";
-            open += fileName;
-            system(open.c_str());
-        }
+            {
+                std::string open = "xdg-open ";
+                open += fileName;
+                system(open.c_str());
+            }
 #endif
             break;
         case 5:
@@ -182,7 +198,15 @@ void UI::removeDog() {
     cin >> breed;
     cout << "Dog Name: ";
     cin >> name;
-    if (service.removeDog(breed, name)) {
+    bool result;
+    try {
+        result = service.removeDog(breed, name);
+    } catch (InvalidDogException &e) {
+        cout << "Could not remove dog!\n";
+        cout << e.what() << endl;
+        return;
+    }
+    if (result) {
         cout << "Dog removed successfully" << endl;
     } else {
         cout << "Dog could not be removed, doesn't exist!\n";
@@ -230,7 +254,9 @@ void UI::printAdminMenu() {
     cout << "2. Remove dog \n";
     cout << "3. Update dog \n";
     cout << "4. List dog \n";
-    cout << "5. Exit \n";
+    cout << "5. Undo\n";
+    cout << "6. Redo \n";
+    cout << "7. Exit \n";
 }
 
 void UI::printUserMenu() {
@@ -246,4 +272,18 @@ void UI::printAdoptionMenu() {
     cout << "2. Don't Adopt\n";
     cout << "3. Next\n";
     cout << "4. Exit\n";
+}
+void UI::undo() {
+    if (service.executeUndo()) {
+        cout << "Undo Successful\n";
+    } else {
+        cout << "Undo Failed\n";
+    }
+}
+void UI::redo() {
+    if (service.executeUndo()) {
+        cout << "Redo Successful\n";
+    } else {
+        cout << "Redo Failed\n";
+    }
 }
