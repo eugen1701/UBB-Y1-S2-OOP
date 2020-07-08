@@ -1,0 +1,7 @@
+Ilon,cerberus,5,6,20
+Campino,cerberus,5,6,20
+Matriona,cerberus,3,3,15
+Fax,gaia,5,6,20
+Matrio,gaia,5,6,20
+Neulino,gaia,5,6,20
+Pionia,gaia,2,2,20
